@@ -80,43 +80,6 @@
     animation: blink 1s steps(1) infinite;
   }
 
-  /* live server panel */
-  .panel {
-    width: 100%;
-    max-width: 34rem;
-    border: 1px solid var(--phosphor-dim);
-    box-shadow: 0 0 12px rgba(61, 255, 85, 0.2), inset 0 0 18px rgba(61, 255, 85, 0.06);
-    padding: 0.7rem 1rem 0.9rem;
-    text-align: left;
-  }
-  .panel-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    border-bottom: 1px dashed var(--phosphor-dim);
-    padding-bottom: 0.4rem;
-    margin-bottom: 0.5rem;
-  }
-  .panel-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    max-height: 11rem;
-    overflow-y: auto;
-    columns: 2;
-    column-gap: 1.5rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--phosphor-dim) transparent;
-  }
-  .panel-list li {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    break-inside: avoid;
-  }
-  .panel-list li::before { content: "> "; color: var(--phosphor-dim); }
-  .panel-msg { color: var(--phosphor-dim); }
-
   /* CRT layers: sit above everything, including the logo */
   .crt, .crt::before, .crt::after {
     position: fixed;
@@ -178,47 +141,8 @@
     <p>FOnline Radar is a primarily Discord-based info hub featuring server trackers, player counters, stats, links, media, and news from across the FOnline bubble, alongside chats with devs and community. Beyond FOnline, it brings you updates on the broader Fallout universe and its modding scene, as well as the post-apocalyptic and RPG genres, including indie projects.</p>
     <p class="cta">What are you waiting for? Get in range!</p>
     <p><a class="link" href="https://discord.gg/zxh7Zbsxfy" target="_blank" rel="noopener">discord.gg/zxh7Zbsxfy</a><span class="cursor" aria-hidden="true"></span></p>
-    <section class="panel" aria-live="polite">
-      <div class="panel-head"><span id="srv-name">Scanning...</span><span id="srv-count"></span></div>
-      <ul class="panel-list" id="srv-list"></ul>
-      <p class="panel-msg" id="srv-msg"></p>
-    </section>
   </main>
   <div class="crt" aria-hidden="true"></div>
   <div class="bar" aria-hidden="true"></div>
-  <script>
-    (function () {
-      var GUILD_ID = "1452722941220491378";
-      var url = "https://discord.com/api/guilds/" + GUILD_ID + "/widget.json";
-      var nameEl = document.getElementById("srv-name");
-      var countEl = document.getElementById("srv-count");
-      var listEl = document.getElementById("srv-list");
-      var msgEl = document.getElementById("srv-msg");
-
-      function load() {
-        fetch(url, { cache: "no-store" })
-          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(function (d) {
-            nameEl.textContent = d.name || "Discord";
-            countEl.textContent = d.presence_count + " online";
-            msgEl.textContent = "";
-            listEl.textContent = "";
-            (d.members || []).forEach(function (m) {
-              var li = document.createElement("li");
-              li.textContent = m.username;
-              listEl.appendChild(li);
-            });
-          })
-          .catch(function () {
-            nameEl.textContent = "Signal lost";
-            countEl.textContent = "";
-            listEl.textContent = "";
-            msgEl.textContent = "Server widget is offline or disabled.";
-          });
-      }
-      load();
-      setInterval(load, 60000);
-    })();
-  </script>
 </body>
 </html>
